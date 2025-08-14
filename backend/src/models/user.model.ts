@@ -1,8 +1,8 @@
-import { Schema, model, Document } from 'mongoose';
-import { IUser, PASSWORD_REGEX, CREDIT_CARD_PATTERNS } from '@piaproj/shared';
+import { CREDIT_CARD_PATTERNS, IUser, PASSWORD_REGEX } from '@piaproj/shared';
+import { Document, Schema, model } from 'mongoose';
 
 // Interface extending both shared IUser and Document
-export interface IUserDocument extends IUser, Document {}
+export interface IUserDocument extends IUser, Document { }
 
 // Schema definition
 const userSchema = new Schema<IUserDocument>({
@@ -16,7 +16,7 @@ const userSchema = new Schema<IUserDocument>({
         type: String,
         required: true,
         validate: {
-            validator: function(v: string) {
+            validator: function (v: string) {
                 return PASSWORD_REGEX.test(v);
             },
             message: 'Password must be 6-10 characters, start with a letter, contain 1 uppercase letter, 3 lowercase letters, 1 number, and 1 special character'
@@ -33,7 +33,13 @@ const userSchema = new Schema<IUserDocument>({
     gender: {
         type: String,
         required: true,
-        enum: ['М', 'Ж']
+        enum: ['M', 'Z']
+    },
+    userType: {
+        type: String,
+        required: true,
+        enum: ['turista', 'vlasnik_vikendice', 'administrator'],
+        default: 'turista'
     },
     address: {
         type: String,
@@ -58,7 +64,7 @@ const userSchema = new Schema<IUserDocument>({
         type: String,
         required: true,
         validate: {
-            validator: function(v: string) {
+            validator: function (v: string) {
                 return Object.values(CREDIT_CARD_PATTERNS).some(pattern => pattern.test(v));
             },
             message: 'Invalid credit card number. Must be a valid Diners (15 digits), MasterCard (16 digits), or Visa (16 digits) card number'
@@ -69,7 +75,7 @@ const userSchema = new Schema<IUserDocument>({
         required: true,
         enum: ['DINERS', 'MASTERCARD', 'VISA'],
         validate: {
-            validator: function(this: IUserDocument) {
+            validator: function (this: IUserDocument) {
                 if (this.creditCardNumber) {
                     if (CREDIT_CARD_PATTERNS.DINERS.test(this.creditCardNumber)) {
                         return this.creditCardType === 'DINERS';
@@ -97,7 +103,8 @@ export interface CreateUserDTO {
     password: string;
     firstName: string;
     lastName: string;
-    gender: 'М' | 'Ж';
+    gender: 'M' | 'Z';
+    userType: 'turista' | 'vlasnik_vikendice' | 'administrator';
     address: string;
     phoneNumber: string;
     email: string;

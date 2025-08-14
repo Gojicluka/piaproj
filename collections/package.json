@@ -1,0 +1,20 @@
+{
+    "name": "piaproj-collections",
+    "version": "1.0.0",
+    "description": "Mock data and seeding scripts for MEAN stack project",
+    "main": "seed.ts",
+    "scripts": {
+        "seed": "ts-node seed.ts",
+        "seed:users": "ts-node seed.ts"
+    },
+    "dependencies": {
+        "mongoose": "^7.4.0",
+        "dotenv": "^16.3.1",
+        "@piaproj/shared": "file:../shared"
+    },
+    "devDependencies": {
+        "@types/node": "^18.15.11",
+        "typescript": "^5.0.4",
+        "ts-node": "^10.9.1"
+    }
+}

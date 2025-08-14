@@ -1,0 +1,35 @@
+:host {
+    display: block;
+    min-height: 100vh;
+}
+
+// Ensure proper layout flow
+router-outlet {
+    display: block;
+}
+
+// Global app styling
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    padding: 0;
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+    line-height: 1.6;
+    color: #333;
+}
+
+// Utility classes for consistent spacing
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 1rem;
+}
+
+@media (max-width: 768px) {
+    .container {
+        padding: 0 0.75rem;
+    }
+}
