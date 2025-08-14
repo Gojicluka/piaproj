@@ -8,11 +8,13 @@ Write-Host "Initializing backend package.json..."
 {
   `"name`": `"mean-backend`",
   `"version`": `"1.0.0`",
-  `"description`": `"MEAN Stack Backend`",
-  `"main`": `"server.js`",
+  `"description`": `"MEAN Stack Backend with TypeScript`",
+  `"main`": `"dist/server.js`",
   `"scripts`": {
-    `"start`": `"node server.js`",
-    `"dev`": `"nodemon server.js`"
+    `"start`": `"node dist/server.js`",
+    `"dev`": `"nodemon src/server.ts`",
+    `"build`": `"tsc`",
+    `"watch`": `"tsc -w`"
   },
   `"dependencies`": {
     `"express`": `"^4.18.2`",
@@ -22,6 +24,11 @@ Write-Host "Initializing backend package.json..."
     `"dotenv`": `"^16.3.1`"
   },
   `"devDependencies`": {
+    `"@types/express`": `"^4.17.17`",
+    `"@types/cors`": `"^2.8.13`",
+    `"@types/node`": `"^18.15.11`",
+    `"typescript`": `"^5.0.4`",
+    `"ts-node`": `"^10.9.1`",
     `"nodemon`": `"^3.0.1`"
   }
 }
@@ -31,45 +38,76 @@ Write-Host "Initializing backend package.json..."
 Write-Host "Installing backend dependencies..."
 npm install
 
+# Create tsconfig.json for backend
+@"
+{
+  `"compilerOptions`": {
+    `"target`": `"es2018`",
+    `"module`": `"commonjs`",
+    `"outDir`": `"./dist`",
+    `"rootDir`": `"./src`",
+    `"strict`": true,
+    `"esModuleInterop`": true,
+    `"skipLibCheck`": true,
+    `"forceConsistentCasingInFileNames`": true,
+    `"moduleResolution`": `"node`",
+    `"resolveJsonModule`": true,
+    `"baseUrl`": `".`",
+    `"paths`": {
+      `"*`": [`"node_modules/*`"]
+    }
+  },
+  `"include`": [`"src/**/*`"],
+  `"exclude`": [`"node_modules`", `"dist`"]
+}
+"@ | Out-File -FilePath "tsconfig.json" -Encoding UTF8
+
+# Install backend dependencies
+Write-Host "Installing backend dependencies..."
+npm install
+
 # Create backend structure
 Write-Host "Creating backend directory structure..."
-New-Item -ItemType Directory -Path ".\models"
-New-Item -ItemType Directory -Path ".\routes"
-New-Item -ItemType Directory -Path ".\controllers"
-New-Item -ItemType Directory -Path ".\config"
+New-Item -ItemType Directory -Path ".\src" -Force
+New-Item -ItemType Directory -Path ".\src\models" -Force
+New-Item -ItemType Directory -Path ".\src\routes" -Force
+New-Item -ItemType Directory -Path ".\src\controllers" -Force
+New-Item -ItemType Directory -Path ".\src\config" -Force
+New-Item -ItemType Directory -Path ".\src\types" -Force
 
-# Create main server file
+# Create main server file with TypeScript
 @"
-const express = require('express');
-const cors = require('cors');
-const mongoose = require('mongoose');
-const bodyParser = require('body-parser');
-require('dotenv').config();
+import express, { Express, Request, Response } from 'express';
+import cors from 'cors';
+import mongoose from 'mongoose';
+import dotenv from 'dotenv';
+import { json } from 'body-parser';
 
-const app = express();
+dotenv.config();
+
+const app: Express = express();
 
 // Middleware
 app.use(cors());
-app.use(bodyParser.json());
+app.use(json());
 
 // MongoDB Connection
-mongoose.connect(process.env.MONGODB_URI || 'mongodb://localhost:27017/meanapp', {
-    useNewUrlParser: true,
-    useUnifiedTopology: true
-}).then(() => {
+mongoose.connect(process.env.MONGODB_URI || 'mongodb://localhost:27017/meanapp')
+  .then(() => {
     console.log('MongoDB Connected');
-}).catch(err => {
+  })
+  .catch((err) => {
     console.error('MongoDB Connection Error:', err);
-});
+  });
 
 // Routes
-app.get('/', (req, res) => {
-    res.json({ message: 'Welcome to MEAN Stack Application' });
+app.get('/', (_req: Request, res: Response) => {
+  res.json({ message: 'Welcome to MEAN Stack Application' });
 });
 
-const PORT = process.env.PORT || 3000;
+const PORT: number = parseInt(process.env.PORT || '3000', 10);
 app.listen(PORT, () => {
-    console.log(`Server is running on port ${PORT}`);
+  console.log(`Server is running on port ${PORT}`);
 });
 "@ | Out-File -FilePath "server.js" -Encoding UTF8
 
