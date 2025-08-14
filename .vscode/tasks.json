@@ -1,0 +1,120 @@
+{
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "label": "Build Project",
+            "type": "shell",
+            "command": "powershell",
+            "args": [
+                "-ExecutionPolicy",
+                "Bypass",
+                "-File",
+                "./build.ps1"
+            ],
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            },
+            "presentation": {
+                "echo": true,
+                "reveal": "always",
+                "focus": false,
+                "panel": "shared",
+                "showReuseMessage": true,
+                "clear": false
+            },
+            "problemMatcher": [],
+            "detail": "Build shared package and backend using build.ps1"
+        },
+        {
+            "label": "Build Shared Package",
+            "type": "shell",
+            "command": "npm",
+            "args": [
+                "run",
+                "build"
+            ],
+            "options": {
+                "cwd": "${workspaceFolder}/shared"
+            },
+            "group": "build",
+            "presentation": {
+                "echo": true,
+                "reveal": "always",
+                "focus": false,
+                "panel": "shared"
+            },
+            "problemMatcher": [
+                "$tsc"
+            ],
+            "detail": "Build only the shared package"
+        },
+        {
+            "label": "Build Backend",
+            "type": "shell",
+            "command": "npm",
+            "args": [
+                "run",
+                "build"
+            ],
+            "options": {
+                "cwd": "${workspaceFolder}/backend"
+            },
+            "group": "build",
+            "dependsOn": "Build Shared Package",
+            "presentation": {
+                "echo": true,
+                "reveal": "always",
+                "focus": false,
+                "panel": "shared"
+            },
+            "problemMatcher": [
+                "$tsc"
+            ],
+            "detail": "Build backend (depends on shared package)"
+        },
+        {
+            "label": "Start Backend Dev",
+            "type": "shell",
+            "command": "npm",
+            "args": [
+                "run",
+                "dev"
+            ],
+            "options": {
+                "cwd": "${workspaceFolder}/backend"
+            },
+            "group": "test",
+            "isBackground": true,
+            "presentation": {
+                "echo": true,
+                "reveal": "always",
+                "focus": false,
+                "panel": "dedicated"
+            },
+            "problemMatcher": [],
+            "detail": "Start backend in development mode"
+        },
+        {
+            "label": "Start Frontend Dev",
+            "type": "shell",
+            "command": "ng",
+            "args": [
+                "serve"
+            ],
+            "options": {
+                "cwd": "${workspaceFolder}/frontend"
+            },
+            "group": "test",
+            "isBackground": true,
+            "presentation": {
+                "echo": true,
+                "reveal": "always",
+                "focus": false,
+                "panel": "dedicated"
+            },
+            "problemMatcher": [],
+            "detail": "Start frontend development server"
+        }
+    ]
+}

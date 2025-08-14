@@ -1,0 +1,88 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "Launch Backend",
+            "type": "node",
+            "request": "launch",
+            "program": "${workspaceFolder}/backend/dist/server.js",
+            "preLaunchTask": "Build Project",
+            "outFiles": [
+                "${workspaceFolder}/backend/dist/**/*.js"
+            ],
+            "env": {
+                "NODE_ENV": "development"
+            },
+            "console": "integratedTerminal",
+            "internalConsoleOptions": "neverOpen",
+            "restart": true,
+            "runtimeExecutable": "node",
+            "skipFiles": [
+                "<node_internals>/**"
+            ],
+            "presentation": {
+                "hidden": false,
+                "group": "backend",
+                "order": 1
+            }
+        },
+        {
+            "name": "Launch Backend (Dev Mode)",
+            "type": "node",
+            "request": "launch",
+            "program": "${workspaceFolder}/backend/src/server.ts",
+            "preLaunchTask": "Build Project",
+            "runtimeArgs": [
+                "-r",
+                "ts-node/register"
+            ],
+            "env": {
+                "NODE_ENV": "development",
+                "TS_NODE_PROJECT": "${workspaceFolder}/backend/tsconfig.json"
+            },
+            "console": "integratedTerminal",
+            "internalConsoleOptions": "neverOpen",
+            "restart": true,
+            "skipFiles": [
+                "<node_internals>/**"
+            ],
+            "presentation": {
+                "hidden": false,
+                "group": "backend",
+                "order": 2
+            }
+        },
+        {
+            "name": "Launch Frontend",
+            "type": "node",
+            "request": "launch",
+            "program": "${workspaceFolder}/frontend/node_modules/@angular/cli/bin/ng",
+            "args": [
+                "serve"
+            ],
+            "cwd": "${workspaceFolder}/frontend",
+            "console": "integratedTerminal",
+            "internalConsoleOptions": "neverOpen",
+            "presentation": {
+                "hidden": false,
+                "group": "frontend",
+                "order": 1
+            }
+        }
+    ],
+    "compounds": [
+        {
+            "name": "Launch Full Stack",
+            "configurations": [
+                "Launch Backend (Dev Mode)",
+                "Launch Frontend"
+            ],
+            "stopAll": true,
+            "presentation": {
+                "hidden": false,
+                "group": "fullstack",
+                "order": 1
+            }
+        }
+    ]
+}

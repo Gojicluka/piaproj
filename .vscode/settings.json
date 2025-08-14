@@ -1,0 +1,22 @@
+{
+    "typescript.preferences.includePackageJsonAutoImports": "on",
+    "typescript.suggest.autoImports": true,
+    "files.exclude": {
+        "**/node_modules": true,
+        "**/dist": true,
+        "**/.git": true,
+        "**/.DS_Store": true
+    },
+    "search.exclude": {
+        "**/node_modules": true,
+        "**/dist": true
+    },
+    "typescript.preferences.includeOnlyTypeOnlyCompletions": false,
+    "editor.formatOnSave": true,
+    "editor.codeActionsOnSave": {
+        "source.organizeImports": "explicit"
+    },
+    "files.associations": {
+        "*.json": "jsonc"
+    }
+}
